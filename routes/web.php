@@ -30,7 +30,8 @@ Route::middleware('auth')->group(function () {
 Route::prefix('application')->group(function() {
     Route::get('/application', [ApplicationController::class, 'create'])->name('application.create');
     Route::post('/application/personal', [ApplicationController::class, 'validatePersonalInfo'])->name('application.validate.personalInfo');
-    Route::post('/application/parents', [ApplicationController::class, 'validateParentsBackground'])->name('applicant.validate.parentsBackground');
+    Route::post('/application/parents', [ApplicationController::class, 'validateParentsBackground'])->name('application.validate.parentsBackground');
+    Route::post('/application/submit', [ApplicationController::class, 'submit'])->name('application.submit');
 });
 
 Route::prefix('applicant')->group(function() {
