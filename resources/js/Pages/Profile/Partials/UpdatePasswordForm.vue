@@ -57,6 +57,7 @@ const updatePassword = () => {
                     type="password"
                     class="mt-1 block w-full"
                     autocomplete="current-password"
+                    
                 />
 
                 <InputError
