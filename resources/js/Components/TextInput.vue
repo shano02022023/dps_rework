@@ -25,7 +25,7 @@ defineExpose({ focus: () => input.value.focus() });
             ref="input"
             type="text"
             class="form-control"
-            placeholder="Username"
+            placeholder="---"
             aria-label="Username"
             aria-describedby="addon-wrapping"
         />

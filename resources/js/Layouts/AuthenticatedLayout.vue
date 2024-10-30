@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { Link, router } from "@inertiajs/vue3";
+import { Link, router, usePage } from "@inertiajs/vue3";
 
 const isNavToggled = ref(false);
 
@@ -119,14 +119,14 @@ function logOut() {
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
                             >
-                                <i class="fas fa-user me-2"></i>John Doe
+                                <i class="fas fa-user me-2"></i>Hi, {{ $page.props.auth.user.name }}
                             </a>
                             <ul
                                 class="dropdown-menu"
                                 aria-labelledby="navbarDropdown"
                             >
                                 <li class="tab is-active">
-                                    <a class="dropdown-item" href="#"
+                                    <a class="dropdown-item" :href="route('profile.edit')"
                                         >Profile</a
                                     >
                                 </li>
