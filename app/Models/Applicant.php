@@ -29,4 +29,9 @@ class Applicant extends Model
     {
         return $this->belongsTo(ApplicantParents::class, 'parents_id');
     }
+
+    public function application()
+    {
+        return $this->belongsTo(Application::class, 'id', 'applicant_id');
+    }
 }

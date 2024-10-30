@@ -35,7 +35,12 @@ Route::prefix('application')->group(function() {
 });
 
 Route::prefix('applicant')->group(function() {
-    Route::get('/', [ApplicantController::class, 'index'])->name('applicant.index');
+    Route::get('/pending', [ApplicantController::class, 'indexPending'])->name('applicant.pending.index');
+    Route::get('/accepted', [ApplicantController::class, 'indexAccepted'])->name('applicant.accepted.index');
+    Route::get('/rejected', [ApplicantController::class, 'indexRejected'])->name('applicant.rejected.index');
+    Route::get('/{id}', [ApplicantController::class, 'view'])->name('applicant.view');
+    Route::post('/{id}/accept', [ApplicantController::class, 'accept'])->name('applicant.accept');
+    Route::post('/{id}/reject', [ApplicantController::class, 'reject'])->name('applicant.reject');
 });
 
 Route::prefix(prefix: 'users')->group(callback: function() {
