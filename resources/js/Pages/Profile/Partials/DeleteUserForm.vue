@@ -93,14 +93,14 @@ const closeModal = () => {
                         Cancel
                     </SecondaryButton>
 
-                    <DangerButton
-                        class="ms-3"
+                    <button
+                        class="btn btn-danger"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
                         @click="deleteUser"
                     >
                         Delete Account
-                    </DangerButton>
+                    </button>
                 </div>
             </div>
         </Modal>

@@ -45,6 +45,12 @@ Route::prefix('applicant')->group(function() {
 
 Route::prefix(prefix: 'users')->group(callback: function() {
     Route::get('/', [UserController::class, 'index'])->name('user.index');
+    Route::get('/edit/{user}', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('/{user}', [UserController::class, 'update'])->name('user.update');
+    Route::delete('/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::post('register', [UserController::class, 'store'])->name('user.store');
+
 });
+
 
 require __DIR__ . '/auth.php';
