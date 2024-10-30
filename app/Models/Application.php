@@ -12,4 +12,9 @@ class Application extends Model
         'interview_date',
         'interview_time',
     ];
+
+    public function applicant()
+    {
+        return $this->belongsTo(Applicant::class, 'applicant_id');
+    }
 }

@@ -2,8 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Models\Application;
+use Illuminate\Http\Request;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -33,6 +34,9 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+                'pendingCount' => Application::where('status', 'PENDING')->count(),
+                'acceptedCount' => Application::where('status', 'ACCEPTED')->count(),
+                'rejectedCount' => Application::where('status', 'REJECTED')->count(),
             ],
             'routeName' => $request->route()->getName(),
         ];
