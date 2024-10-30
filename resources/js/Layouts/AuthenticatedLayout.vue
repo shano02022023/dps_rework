@@ -31,7 +31,7 @@ function logOut() {
             </div>
             <div class="list-group list-group-flush my-3">
                 <ul class="side-menu">
-                    <li class="tab is-active">
+                    <li class="tab" :class="{'is-active' : $page.props.routeName.includes('dashboard')}">
                         <Link
                             :href="route('dashboard')"
                             data-switcher
@@ -42,7 +42,7 @@ function logOut() {
                         >
                     </li>
 
-                    <li class="tab">
+                    <li class="tab" :class="{'is-active' : $page.props.routeName.includes('user')}">
                         <Link
                            :href="route('user.index')"
                             data-switcher
@@ -52,7 +52,7 @@ function logOut() {
                         >
                     </li>
 
-                    <li class="tab">
+                    <li class="tab" :class="{'is-active' : $page.props.routeName.includes('applicant')}">
                         <Link
                             :href="route('applicant.index')"
                             data-switcher

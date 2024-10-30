@@ -1,7 +1,7 @@
 <script setup>
-import { Link, useForm } from "@inertiajs/vue3";
+import { Link, useForm, Head } from "@inertiajs/vue3";
 import ApplicationLayout from "@/Layouts/ApplicationLayout.vue";
-import { onMounted, ref, computed  } from "vue";
+import { onMounted, ref, computed } from "vue";
 import InputError from "@/Components/InputError.vue";
 
 const props = defineProps({
@@ -23,7 +23,7 @@ const personalForm = useForm({
     weight: "",
     status: "",
     citizenship: "",
-    country: "",
+    country: "Philippines",
     province: "",
     municipality: "",
     barangay: "",
@@ -50,7 +50,7 @@ const validatePersonalInfo = () => {
 };
 
 const validateParentsBg = () => {
-    parentsForm.post(route("applicant.validate.parentsBackground"), {
+    parentsForm.post(route("application.validate.parentsBackground"), {
         onSuccess: () => {
             currentStep.value = "previewInfo";
         },
@@ -58,20 +58,21 @@ const validateParentsBg = () => {
 };
 
 const submitInfo = () => {
-    currentStep.value = "success";
-    // personalForm.post(route("applicant.submit"), {
-    //     onSuccess: () => {
-    //         // Redirect to the next step
-    //         // route('applicant.form.parents');
-    //     },
-    // });
+    const mergedForm = useForm({
+        ...personalForm.data(),
+        ...parentsForm.data(),
+    });
+    mergedForm.post(route("application.submit"), {
+        onSuccess: () => {
+            currentStep.value = "success";
+        },
+    });
 };
 
 const getProvinces = () => {
     axios.get("https://psgc.gitlab.io/api/provinces.json").then((response) => {
         provinces.value = response.data;
     });
-    console.log(provinces);
 };
 
 const getCitiesMunicipalities = () => {
@@ -87,7 +88,6 @@ const getCitiesMunicipalities = () => {
         .then((response) => {
             municipalities.value = response.data;
         });
-    console.log(municipalities);
 };
 
 const getBarangays = () => {
@@ -103,7 +103,6 @@ const getBarangays = () => {
         .then((response) => {
             barangays.value = response.data;
         });
-    console.log(barangays);
 };
 
 const progressWidth = computed(() => {
@@ -126,6 +125,7 @@ onMounted(() => {
 });
 </script>
 <template>
+    <Head title="Application form" />
     <ApplicationLayout>
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
@@ -209,6 +209,25 @@ onMounted(() => {
                             <InputError
                                 v-if="errors.lastname"
                                 :message="errors.lastname"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="email" class="form-label">Email:</label>
+                            <input
+                                :class="{ 'is-invalid': errors.email }"
+                                v-model="personalForm.email"
+                                type="email"
+                                value=""
+                                class="form-control"
+                                id="email"
+                                name="email"
+                            />
+                            <InputError
+                                v-if="errors.email"
+                                :message="errors.email"
                             />
                         </div>
                     </div>
@@ -304,6 +323,9 @@ onMounted(() => {
                                 :message="errors.weight"
                             />
                         </div>
+                    </div>
+
+                    <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="status" class="form-label"
                                 >Marital Status:</label
@@ -325,9 +347,6 @@ onMounted(() => {
                                 :message="errors.status"
                             />
                         </div>
-                    </div>
-
-                    <div class="row mb-3">
                         <div class="col-md-4">
                             <label
                                 for="citizenship"
@@ -349,7 +368,11 @@ onMounted(() => {
                                 :message="errors.citizenship"
                             />
                         </div>
+                    </div>
 
+                    <div class="row mb-3">
+                        <span class="text-muted"
+                            >Please provide your current address.</span>
                         <div class="col-md-4">
                             <label for="country" class="form-label"
                                 >Country:</label
@@ -371,10 +394,10 @@ onMounted(() => {
 
                         <div class="col-md-4">
                             <label for="barangay" class="form-label"
-                                >Provice:</label
+                                >Province:</label
                             >
                             <select
-                                :class="{ 'is-invalid': errors.country }"
+                                :class="{ 'is-invalid': errors.province }"
                                 v-model="personalForm.province"
                                 name="province"
                                 class="js-example-basic-single form-select"
@@ -398,9 +421,6 @@ onMounted(() => {
                                 :message="errors.province"
                             />
                         </div>
-                    </div>
-
-                    <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="barangay" class="form-label"
                                 >City/Municipality:</label
@@ -473,25 +493,7 @@ onMounted(() => {
                                 :message="errors.barangay"
                             />
                         </div>
-
-                        <div class="col-md-4">
-                            <label for="email" class="form-label">Email:</label>
-                            <input
-                                :class="{ 'is-invalid': errors.email }"
-                                v-model="personalForm.email"
-                                type="email"
-                                value=""
-                                class="form-control"
-                                id="email"
-                                name="email"
-                            />
-                            <InputError
-                                v-if="errors.email"
-                                :message="errors.email"
-                            />
-                        </div>
                     </div>
-
                     <!-- Submit Button -->
                     <div class="row mb-3">
                         <div class="col-md-12">
@@ -511,6 +513,10 @@ onMounted(() => {
             <div v-else-if="currentStep == 'parentsBackground'">
                 <h2 class="text-center mb-4">Parents/Guardian Background</h2>
                 <form @submit.prevent="validateParentsBg">
+                    <span class="text-muted"
+                        >Please provide the following information about your
+                        parents.</span
+                    >
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="mother_firstname" class="form-label"
@@ -594,6 +600,8 @@ onMounted(() => {
                                 :message="errors.mother_occupation"
                             />
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="father_firstname" class="form-label"
                                 >Father's First Name:</label
@@ -634,8 +642,6 @@ onMounted(() => {
                                 :message="errors.father_middlename"
                             />
                         </div>
-                    </div>
-                    <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="father_lastname" class="form-label"
                                 >Father's Last Name:</label
