@@ -169,7 +169,7 @@ class ApplicationController extends Controller
             'status' => 'PENDING',
         ]);
 
-        Mail::to($applicant->email)->send(new SubmittedApplication($applicant));
+        // Mail::to($applicant->email)->send(new SubmittedApplication($applicant));
 
         return Redirect::route('application.create');
     }

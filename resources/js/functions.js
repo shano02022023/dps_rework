@@ -14,3 +14,12 @@ export function formatTime(timeString) {
 
     return `${formattedHour}:${String(minute).padStart(2, '0')} ${ampm}`;
 }
+
+export function formatMonth(month) {
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    
+    return monthNames[month - 1]; 
+}

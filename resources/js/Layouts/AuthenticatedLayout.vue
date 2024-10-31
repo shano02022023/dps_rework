@@ -14,7 +14,7 @@ function logOut() {
         confirmButtonText: "Yes",
     }).then((result) => {
         if (result.isConfirmed) {
-            router.post("logout");
+            router.post(route("logout"));
         }
     });
 }
