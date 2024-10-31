@@ -197,17 +197,14 @@ function logOut() {
                                 aria-labelledby="navbarDropdown"
                             >
                                 <li class="tab is-active">
-                                    <a class="dropdown-item" :href="route('profile.edit')"
-                                        >Profile</a
+                                    <Link class="dropdown-item" :href="route('profile.edit')"
+                                        >Profile</Link
                                     >
                                 </li>
                                 <li class="tab">
                                     <a class="dropdown-item" href="#"
                                         >Settings</a
                                     >
-                                </li>
-                                <li class="tab">
-                                    <a class="dropdown-item" href="#">Logout</a>
                                 </li>
                             </ul>
                         </li>
