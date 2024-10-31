@@ -58,14 +58,35 @@ const validateParentsBg = () => {
 };
 
 const submitInfo = () => {
-    const mergedForm = useForm({
-        ...personalForm.data(),
-        ...parentsForm.data(),
-    });
-    mergedForm.post(route("application.submit"), {
-        onSuccess: () => {
-            currentStep.value = "success";
-        },
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to submit your application!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, submit!",
+        cancelButtonText: "Cancel",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Submitting...",
+                text: "Please wait while we submit your application.",
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+            const mergedForm = useForm({
+                ...personalForm.data(),
+                ...parentsForm.data(),
+            });
+            mergedForm.post(route("application.submit"), {
+                onSuccess: () => {
+                    currentStep.value = "success";
+                    Swal.close();
+                },
+            });
+        }
     });
 };
 
@@ -372,7 +393,8 @@ onMounted(() => {
 
                     <div class="row mb-3">
                         <span class="text-muted"
-                            >Please provide your current address.</span>
+                            >Please provide your current address.</span
+                        >
                         <div class="col-md-4">
                             <label for="country" class="form-label"
                                 >Country:</label
