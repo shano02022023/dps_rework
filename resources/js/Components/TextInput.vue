@@ -1,6 +1,11 @@
 <script setup>
 import { onMounted, ref } from "vue";
 
+
+const props = defineProps({
+    error: String,
+    placeholder: String,
+});
 const model = defineModel({
     type: String,
     required: true,
@@ -19,13 +24,13 @@ defineExpose({ focus: () => input.value.focus() });
 
 <template>
     <div class="input-group flex-nowrap">
-        <span class="input-group-text" id="addon-wrapping">@</span>
         <input
             v-model="model"
+            :class="{ 'is-invalid': error }"
+            :placeholder="placeholder"
             ref="input"
             type="text"
             class="form-control"
-            placeholder="Username"
             aria-label="Username"
             aria-describedby="addon-wrapping"
         />

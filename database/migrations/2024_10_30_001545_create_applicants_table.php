@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -37,12 +36,13 @@ return new class extends Migration
             ]);
             $table->string('height');
             $table->string('weight');
+            $table->date('birthdate');
             $table->string('status');
             $table->string('citizenship');
             $table->string('barangay');
             $table->string('municipality');
             $table->string('province');
-            $table->foreignId('parents_id')->constrained('parents')->onDelete('cascade')->nullable();
+            $table->foreignId('parents_id')->nullable()->constrained('parents')->onDelete('cascade');
             $table->string('country');
             $table->timestamps();
         });
@@ -51,8 +51,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('applicant_id')->constrained('applicants')->onDelete('cascade');
             $table->enum('status', ['PENDING', 'ACCEPTED', 'REJECTED']);
-            $table->date('interview_date');
-            $table->time('interview_time');
+            $table->date('interview_date')->nullable();
+            $table->time('interview_time')->nullable();
             $table->timestamps();
         });
     }

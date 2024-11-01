@@ -2,119 +2,58 @@
 import { Head, Link } from "@inertiajs/vue3";
 
 defineProps({
-    canLogin: {
-        type: Boolean,
-    },
-    canRegister: {
-        type: Boolean,
-    },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
-    phpVersion: {
-        type: String,
-        required: true,
-    },
+    canLogin: { type: Boolean },
+    canRegister: { type: Boolean },
+    laravelVersion: { type: String, required: true },
+    phpVersion: { type: String, required: true },
 });
 </script>
 
 <template>
     <Head title="Welcome" />
-    <Link :href="route('login')" class="admin-login">Admin Login</Link>
-    <div class="body">
-    <div class="container">
-        <div class="icon-container">
-            <center><img src="images/shield.jpg" alt="Icon" /></center>
+
+    <!-- Page Background Wrapper with White Background -->
+    <div style="background-color: white; min-height: 100vh; color: #333;">
+
+        <!-- Navbar with Logo and Title, Imitating Tailwind Layout with Bootstrap -->
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: white; padding: 20px 2rem; margin: auto; max-width: 1140px;">
+            <div class="container-fluid d-flex align-items-center justify-content-between">
+                <a class="navbar-brand d-flex align-items-center fw-bold" href="#" style="color: #4cda6d;">
+                    <img src="images/shield.jpg" alt="Icon" class="rounded-circle me-3" style="width: 60px; height: 60px;" />
+                    DPS - Data Processing System
+                </a>
+                <div class="d-flex">
+                    <Link :href="route('login')" class="btn me-2" style="background: linear-gradient(115deg, #4cda6d 10%, #70e78c 90%); color: white; border: none; padding: 12px 20px; font-size: 1rem;">
+                        Admin Login
+                    </Link>
+                    <Link :href="route('application.create')" class="btn" style="background: linear-gradient(115deg, #4cda6d 10%, #70e78c 90%); color: white; border: none; padding: 12px 20px; font-size: 1rem;">
+                        Applicant Form
+                    </Link>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main content container with split columns -->
+        <div class="container d-flex align-items-center" style="min-height: calc(100vh - 80px); max-width: 1300px;">
+            <!-- Left Column: Text Content -->
+            <div class="display-5 fw-bold text-start" style="color: #333;">
+                <h2 class="display-5 fw-bold" style="color: #333;">
+                    HERO SECURITY AND <span style="background: linear-gradient(115deg, #4cda6d 10%, #70e78c 90%); -webkit-background-clip: text; color: transparent;">
+                        INVESTIGATION SERVICES
+                    </span>
+                </h2>
+                <p class="lead" style="color: #555; text-align: justify;">
+                    This platform is designed to streamline the process of submitting and reviewing applications for security and investigative services.
+                    As an applicant, you can easily submit your credentials and service requests through our secure system. Each application will be
+                    carefully reviewed by our dedicated administration team. You'll be promptly notified when your application is accepted or if further
+                    action is required.
+                </p>
+            </div>
+
+            <!-- Right Column: Image Placeholder -->
+            <div class="col-lg-6 text-center">
+                <img src="images/system.png" alt="Application Illustration" class="img-fluid rounded" style="max-width: 100%; height: auto;" />
+            </div>
         </div>
-        <h2>DPS</h2>
-        <p class="top-text">
-            This platform is designed to streamline the process of submitting
-            and reviewing applications for security and investigative services.
-            As an applicant, you can easily submit your credentials and service
-            requests through our secure system. Once submitted, each application
-            will be carefully reviewed by our dedicated administration team.
-            You’ll be promptly notified when your application is accepted or if
-            further action is required.
-        </p>
-        <Link :href="route('application.create')" class="btn-fill-up">Fill up</Link>
-    </div>
     </div>
 </template>
-
-<style>
-/* CSS styles for the page */
-.body {
-    background: linear-gradient(115deg, #4cda6d 10%, #70e78c 90%);
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    position: relative;
-}
-
-/* Admin Login link styling */
-.admin-login {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    text-decoration: none;
-    background-color: #28a745;
-    color: white;
-    padding: 15px 15px; /* Increased padding for larger button */
-    border-radius: 8px;
-    font-weight: 800; /* Made text more bold */
-    font-size: 15px; /* Increased font size */
-    transition: background-color 0.3s;
-}
-
-.admin-login:hover {
-    background-color: #1e7d34;
-}
-
-/* Container styling */
-.container {
-    width: 400px;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    text-align: center;
-}
-
-/* Icon container styling */
-.icon-container {
-    margin-bottom: 20px;
-}
-
-.icon-container img {
-    width: 80px;
-    height: 80px;
-}
-
-/* Heading styling */
-h2 {
-    text-align: center;
-    margin: 0;
-    padding: 0;
-}
-
-/* Button for Fill-up form */
-.btn-fill-up {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.btn-fill-up:hover {
-    background-color: #1e7d34;
-}
-</style>

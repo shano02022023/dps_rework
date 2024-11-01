@@ -1,27 +1,27 @@
 <script setup>
 import { ref } from "vue";
-import { Link, router } from "@inertiajs/vue3";
+import { Link, router, usePage } from "@inertiajs/vue3";
 
 const isNavToggled = ref(false);
 
 function logOut() {
-        Swal.fire({
-            title: "Are you sure you want to log out?",
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                router.post("logout");
-            }
-        });
-    }
+    Swal.fire({
+        title: "Are you sure you want to log out?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            router.post(route("logout"));
+        }
+    });
+}
 </script>
 
 <template>
-    <div class="d-flex" :class="{'toggled' : isNavToggled}" id="wrapper">
+    <div class="d-flex" :class="{ toggled: isNavToggled }" id="wrapper">
         <!-- Sidebar -->
         <div class="bg-white" id="sidebar-wrapper">
             <div
@@ -31,7 +31,13 @@ function logOut() {
             </div>
             <div class="list-group list-group-flush my-3">
                 <ul class="side-menu">
-                    <li class="tab is-active">
+                    <li
+                        class="tab"
+                        :class="{
+                            'is-active':
+                                $page.props.routeName.includes('dashboard'),
+                        }"
+                    >
                         <Link
                             :href="route('dashboard')"
                             data-switcher
@@ -42,9 +48,14 @@ function logOut() {
                         >
                     </li>
 
-                    <li class="tab">
+                    <li
+                        class="tab"
+                        :class="{
+                            'is-active': $page.props.routeName.includes('user'),
+                        }"
+                    >
                         <Link
-                           :href="route('user.index')"
+                            :href="route('user.index')"
                             data-switcher
                             data-tab="users"
                             class="list-group-item list-group-item-action bg-transparent text-success-emphasis"
@@ -53,17 +64,79 @@ function logOut() {
                     </li>
 
                     <li class="tab">
-                        <Link
-                            :href="route('applicant.index')"
-                            data-switcher
-                            data-tab="applicants"
-                            class="list-group-item list-group-item-action bg-transparent text-success-emphasis"
-                            ><i class="bx bxs-file-blank"></i> Applicants
-                            <span
-                                id="pendingCount"
-                                class="badge text-bg-danger"
-                            ></span>
-                    </Link>
+                        <div
+                            class="accordion-item list-group-item list-group-item-action bg-transparent text-success-emphasis"
+                        >
+                            <h2 class="accordion-header" id="flush-headingOne">
+                                <button
+                                    class="accordion-button collapsed"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseOne"
+                                    aria-expanded="false"
+                                    aria-controls="flush-collapseOne"
+                                >
+                                    <i class="bx bxs-file-blank"></i> Applicants
+                                </button>
+                            </h2>
+                            <div
+                                id="flush-collapseOne"
+                                :class="{'show': $page.props.routeName.includes('applicant')}"
+                                class="accordion-collapse collapse"
+                                aria-labelledby="flush-headingOne"
+                                data-bs-parent="#accordionFlushExample"
+                            >
+                                <div class="accordion-body">
+                                    <ul class="side-menu">
+                                        <li class="tab" :class="{'is-active': $page.props.routeName.includes('applicant.pending')}">
+                                            <Link
+                                                :href="route('applicant.pending.index')"
+                                                data-switcher
+                                                data-tab="applicants"
+                                                class="list-group-item list-group-item-action bg-transparent text-success-emphasis"
+                                                ><i class='bx bxs-minus-circle'></i>
+                                                Pending
+                                                <span
+                                                    id="pendingCount"
+                                                    class="badge text-bg-danger"
+                                                > {{ $page.props.auth.pendingCount }}</span>
+                                            </Link>
+                                        </li>
+                                        <li class="tab" :class="{'is-active': $page.props.routeName.includes('applicant.accepted')}">
+                                            <Link
+                                                :href="route('applicant.accepted.index')"
+                                                data-switcher
+                                                data-tab="applicants"
+                                                class="list-group-item list-group-item-action bg-transparent text-success-emphasis"
+                                                ><i class='bx bxs-check-circle'></i>
+                                                Accepted
+                                                <span
+                                                    id="acceptedCount"
+                                                    class="badge text-bg-danger"
+                                                >
+                                                {{ $page.props.auth.acceptedCount }}
+                                            </span>
+                                            </Link>
+                                        </li>
+                                        <li class="tab" :class="{'is-active': $page.props.routeName.includes('applicant.rejected')}">
+                                            <Link
+                                                :href="route('applicant.rejected.index')"
+                                                data-switcher
+                                                data-tab="applicants"
+                                                class="list-group-item list-group-item-action bg-transparent text-success-emphasis"
+                                                ><i class='bx bxs-x-circle'></i>
+                                                Rejected
+                                                <span
+                                                    id="rejectedCount"
+                                                    class="badge text-bg-danger"
+                                                >
+                                                {{ $page.props.auth.rejectedCount }}</span>
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </li>
 
                     <button
@@ -84,7 +157,7 @@ function logOut() {
             >
                 <div class="d-flex align-items-center">
                     <i
-                           @click="isNavToggled = !isNavToggled"
+                        @click="isNavToggled = !isNavToggled"
                         class="fas fa-align-left primary-text fs-4 me-3"
                         id="menu-toggle"
                     ></i>
@@ -100,9 +173,7 @@ function logOut() {
                     aria-expanded="false"
                     aria-label="Toggle navigation"
                 >
-                    <span class="navbar-toggler-icon text-danger"
-                        ></span
-                    >
+                    <span class="navbar-toggler-icon text-danger"></span>
                 </button>
 
                 <div
@@ -119,24 +190,21 @@ function logOut() {
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
                             >
-                                <i class="fas fa-user me-2"></i>John Doe
+                                <i class="fas fa-user me-2"></i>Hi, {{ $page.props.auth.user.name }}
                             </a>
                             <ul
                                 class="dropdown-menu"
                                 aria-labelledby="navbarDropdown"
                             >
                                 <li class="tab is-active">
-                                    <a class="dropdown-item" href="#"
-                                        >Profile</a
+                                    <Link class="dropdown-item" :href="route('profile.edit')"
+                                        >Profile</Link
                                     >
                                 </li>
                                 <li class="tab">
                                     <a class="dropdown-item" href="#"
                                         >Settings</a
                                     >
-                                </li>
-                                <li class="tab">
-                                    <a class="dropdown-item" href="#">Logout</a>
                                 </li>
                             </ul>
                         </li>
